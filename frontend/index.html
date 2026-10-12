@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10101b">
+<title>AI Music Lab — v0.8</title>
+<style>
+:root{--bg:#0d0e18;--panel:#171827;--panel2:#202137;--text:#f5f4ff;--muted:#aaa9c4;--line:#30314c;--a:#55e6ed;--b:#f27ad7;--good:#8ef0bd;--warn:#ffd18a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 85% -10%,#28224d 0%,transparent 65%),radial-gradient(700px 500px at -15% 20%,#143541 0%,transparent 60%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.wrap{max-width:980px;margin:auto;padding:18px 14px 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 20px}.brand{display:flex;align-items:center;gap:10px}.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,var(--a),var(--b));color:#10101b;box-shadow:0 8px 30px #55e6ed20}.brand h1{font-size:19px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:0}.header-tools{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.lang-switch{display:flex;gap:5px;padding:3px;border:1px solid var(--line);border-radius:12px;background:#10111d}.lang-btn{border:1px solid transparent;border-radius:8px;padding:6px 10px;background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:800;cursor:pointer}.lang-btn.active{background:linear-gradient(100deg,var(--a),#b2a4ff,var(--b));color:#0d101a}.badge{font-size:11px;border:1px solid #444565;border-radius:99px;padding:5px 9px;color:var(--a);white-space:nowrap}
+.hero{padding:23px 19px;border:1px solid #3c3a60;border-radius:24px;background:linear-gradient(125deg,#1c2034eF,#251a37ed);position:relative;overflow:hidden}.hero:after{content:"♫";position:absolute;left:12px;bottom:-42px;font-size:155px;color:#ffffff08;pointer-events:none}.hero h2{font-size:clamp(23px,5vw,34px);line-height:1.25;margin:0 0 9px}.grad{background:linear-gradient(90deg,var(--a),var(--b));background-clip:text;color:transparent}.hero p{color:#c7c6dd;margin:0;max-width:600px;font-size:14px}.status{margin-top:16px;display:flex;align-items:center;gap:8px;color:var(--warn);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 12px #ffd18a66}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0}.tab{border:1px solid var(--line);border-radius:14px;padding:12px 6px;background:#141522;color:var(--muted);font-weight:700;font-size:13px}.tab.active{color:var(--text);border-color:var(--a);background:linear-gradient(135deg,#16343d,#30203b);box-shadow:0 0 0 1px #55e6ed18 inset}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{border:1px solid var(--line);border-radius:20px;background:#151624eF;padding:17px;margin-bottom:14px;min-width:0}.card h3{font-size:17px;margin:0 0 5px}.sub{font-size:12px;color:var(--muted);margin:0 0 15px}.field{margin:13px 0}.field label{display:block;font-size:13px;color:#e1e0f4;margin-bottom:7px}.field input[type=text],.field textarea,.field select,.field input[type=number]{width:100%;border:1px solid #3a3b59;border-radius:12px;background:#10111d;color:var(--text);padding:12px;font:inherit;font-size:14px;outline:none}.field textarea{min-height:100px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--a)}.choices{display:flex;flex-wrap:wrap;gap:8px}.choice{border:1px solid #393a58;border-radius:11px;padding:8px 11px;font-size:12px;color:var(--muted);background:#10111d;cursor:pointer}.choice.on{border-color:var(--b);color:var(--text);background:#36213d}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:0;border-radius:13px;padding:13px 16px;width:100%;font:inherit;font-weight:800;cursor:pointer;color:#0d101a;background:linear-gradient(100deg,var(--a),#b2a4ff,var(--b));box-shadow:0 8px 24px #55e6ed17}.btn.secondary{background:#25263c;color:var(--text);border:1px solid #414264;box-shadow:none}.btn:active{transform:scale(.99)}.result{border:1px dashed #484969;border-radius:15px;padding:14px;background:#11121f;margin-top:12px}.result strong{display:block;margin-bottom:5px}.result p{font-size:12px;color:var(--muted);margin:0}.filebox{display:block;border:1px dashed #565775;border-radius:14px;padding:17px;text-align:center;background:#11121e;color:var(--muted);font-size:13px}.filebox input{display:block;width:100%;margin-top:10px;font-size:12px}.meter{height:7px;background:#292a42;border-radius:9px;overflow:hidden;margin:10px 0}.meter span{display:block;height:100%;width:15%;background:linear-gradient(90deg,var(--a),var(--b));border-radius:9px}.hidden{display:none!important}.foot{text-align:center;color:#777891;font-size:11px;margin-top:20px}.pill{display:inline-block;border:1px solid #3e405e;border-radius:99px;padding:4px 9px;color:var(--good);font-size:11px}.themebar{display:flex;gap:7px;align-items:center}.swatch{width:19px;height:19px;border:2px solid #ffffff60;border-radius:50%;padding:0}.swatch.cyan{background:linear-gradient(135deg,#55e6ed,#f27ad7)}.swatch.violet{background:linear-gradient(135deg,#aa8cff,#65cfff)}.swatch.mint{background:linear-gradient(135deg,#8ef0bd,#ffd18a)}.tiny{font-size:11px;color:var(--muted)}
+@media(max-width:650px){.header-tools{align-items:flex-end}.lang-btn{padding:6px 8px}.grid{grid-template-columns:1fr}.wrap{padding:12px 11px 30px}.hero{padding:20px 16px}.tabs{gap:5px}.tab{font-size:11px;padding:11px 3px}.card{padding:14px}.top{align-items:flex-start}.badge{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+ <div class="brand"><div class="logo">♫</div><div><h1>AI Music Lab</h1><p data-brand-subtitle>AI-powered music studio</p></div></div>
+ <div class="header-tools"><div class="lang-switch" role="group" aria-label="Language"><button type="button" id="langEn" class="lang-btn active" onclick="setLanguage('en')">English</button><button type="button" id="langFa" class="lang-btn" onclick="setLanguage('fa')">فارسی</button></div><div class="badge" data-version-badge>v0.8.1 • Bilingual UX Fixes</div><div class="themebar" style="justify-content:flex-start;margin-top:8px"><span class="tiny" data-theme-label>Theme:</span><button class="swatch cyan" aria-label="تم فیروزه‌ای و صورتی" onclick="setTheme('cyan')"></button><button class="swatch violet" aria-label="تم بنفش و آبی" onclick="setTheme('violet')"></button><button class="swatch mint" aria-label="تم سبز و کهربایی" onclick="setTheme('mint')"></button></div></div>
+</header>
+<section class="hero">
+ <h2>ایده‌ات را تبدیل به <span class="grad">موسیقی کن.</span></h2>
+ <p>مسیر ساخت آهنگ، طراحی پرامپت و جداسازی وکال را از یک فضای ساده و مناسب گوشی شروع کن.</p>
+ <div class="status"><span class="dot"></span><span>حالت فعلی: در حال بررسی اتصال به موتور جداسازی صوت…</span></div>
+</section>
+<nav class="tabs" aria-label="بخش‌ها">
+ <button class="tab active" data-tab="create" onclick="showTab('create',this)">🎼 ساخت آهنگ</button>
+ <button class="tab" data-tab="prompt" onclick="showTab('prompt',this)">✨ سازنده پرامپت</button>
+ <button class="tab" data-tab="separate" onclick="showTab('separate',this)">🎙️ جداسازی وکال</button>
+ <button class="tab" data-tab="battle" onclick="showTab('battle',this)">⚔️ بتل آرنا</button>
+</nav>
+<section id="create">
+ <div class="grid">
+  <div class="card">
+   <h3>ساخت آهنگ جدید</h3><p class="sub">اول مشخص کن چه آهنگی در ذهن داری.</p>
+   <div class="field"><label>روش ساخت</label><div class="choices" data-group="lyricMode"><button class="choice on" data-value="write">هوش مصنوعی متن و آهنگ بسازد</button><button class="choice" data-value="own">متن خودم را دارم</button></div></div>
+   <div class="field" id="lyricsField"><label for="lyrics">متن آهنگ (اختیاری)</label><textarea id="lyrics" placeholder="متن آهنگت را اینجا بنویس..."></textarea></div>
+   <div class="field"><label for="idea">موضوع یا داستان آهنگ</label><input id="idea" type="text" placeholder="مثلاً یک آهنگ شاد درباره شروع دوباره"></div>
+   <div class="row">
+    <div class="field"><label for="language">زبان</label><select id="language"><option>فارسی</option><option>English</option><option>Русский</option><option>ترکی</option><option>بدون کلام</option></select></div>
+    <div class="field"><label for="mood">حال‌وهوا</label><select id="mood"><option>شاد و پرانرژی</option><option>عاشقانه</option><option>غمگین و احساسی</option><option>حماسی</option><option>آرام و رویایی</option><option>تاریک و مرموز</option></select></div>
+   </div>
+  </div>
+  <div class="card">
+   <h3>تنظیمات صدا</h3><p class="sub">ویژگی‌های کلی آهنگ را انتخاب کن.</p>
+   <div class="field"><label>سبک موسیقی</label><div class="choices" data-group="genre"><button class="choice on" data-value="پاپ">پاپ</button><button class="choice" data-value="هیپ‌هاپ">هیپ‌هاپ</button><button class="choice" data-value="رپ">رپ</button><button class="choice" data-value="راک">راک</button><button class="choice" data-value="الکترونیک">الکترونیک</button><button class="choice" data-value="سینمایی">سینمایی</button></div></div>
+   <div class="field"><label>نوع خروجی</label><div class="choices" data-group="output"><button class="choice on" data-value="با وکال">با وکال</button><button class="choice" data-value="بدون وکال">فقط موسیقی</button></div></div>
+   <div class="field"><label for="bpm">سرعت آهنگ (BPM)</label><div style="display:flex;gap:10px;align-items:center"><input id="bpm" type="range" min="60" max="180" value="110" style="flex:1;accent-color:var(--a)" oninput="document.getElementById('bpmValue').textContent=this.value"><strong id="bpmValue">110</strong></div><div class="tiny">۶۰ = آرام‌تر • ۱۸۰ = سریع‌تر</div></div>
+   <div class="field"><label for="instruments">سازها یا جزئیات دلخواه</label><input id="instruments" type="text" placeholder="مثلاً گیتار، پیانو، درام سنگین"></div>
+   <button class="btn" onclick="buildSongBrief()">آماده‌سازی درخواست ساخت آهنگ</button>
+   <div id="songResult" class="result hidden" aria-live="polite"></div>
+  </div>
+ </div>
+</section>
+<section id="prompt" class="hidden">
+ <div class="card">
+  <h3>سازنده پرامپت موسیقی</h3><p class="sub">یک توضیح دقیق و قابل استفاده برای سرویس‌های تولید موسیقی بساز.</p>
+  <div class="grid">
+   <div>
+    <div class="field"><label for="pStyle">سبک</label><input id="pStyle" type="text" value="شاد پاپ مدرن"></div>
+    <div class="field"><label for="pVocal">وکال</label><select id="pVocal"><option>وکال اصلی گرم و احساسی</option><option>وکال زنانه</option><option>وکال مردانه</option><option>دوئت</option><option>بدون وکال، فقط موسیقی</option><option>رپ ملودیک</option></select></div>
+    <div class="field"><label for="pMood">فضا و انرژی</label><input id="pMood" type="text" value="مثبت، پرانرژی، ملودی به‌یادماندنی"></div>
+   </div>
+   <div>
+    <div class="field"><label for="pInstruments">سازها</label><input id="pInstruments" type="text" value="درام شفاف، بیس گرم، سینت نرم"></div>
+    <div class="field"><label for="pStructure">ساختار آهنگ</label><select id="pStructure"><option>شروع کوتاه، ورس، کورس قدرتمند، پایان تمیز</option><option>شروع آرام و اوج تدریجی</option><option>هوک فوری برای ویدئوی کوتاه</option><option>بیت تکرارشونده برای تمرین خوانندگی</option></select></div>
+    <div class="field"><label for="pBpm">BPM</label><input id="pBpm" type="number" min="40" max="240" value="110"></div>
+   </div>
+  </div>
+  <button class="btn" onclick="makePrompt()">ساخت پرامپت</button>
+  <div id="promptResult" class="result hidden" aria-live="polite"></div>
+  <button id="copyPrompt" class="btn secondary hidden" style="margin-top:9px" onclick="copyText('promptText')">کپی پرامپت</button>
+ </div>
+</section>
+<section id="separate" class="hidden">
+ <div class="grid">
+  <div class="card">
+   <h3>فایل صوتی را انتخاب کن</h3><p class="sub">برای تست جداسازی، فایلی را انتخاب کن که اجازه استفاده از آن را داری.</p>
+   <label class="filebox">🎵 انتخاب فایل از گوشی<input id="audioFile" type="file" accept="audio/*"></label>
+   <div id="fileInfo" class="tiny" style="margin-top:10px">هنوز فایلی انتخاب نشده است.</div>
+   <div class="field"><label>سطح جداسازی</label><div class="choices" data-group="separation"><button class="choice on" data-value="simple">ساده: وکال + موسیقی</button><button class="choice" data-value="pro">حرفه‌ای: ۴ بخش</button></div></div>
+   <button id="separateBtn" class="btn" onclick="runSeparation()">شروع جداسازی واقعی</button>
+   <div id="sepProgress" class="result hidden" aria-live="polite"><strong id="sepStatus">در حال آماده‌سازی…</strong><div class="meter"><span id="sepMeter" style="width:8%"></span></div><p id="sepDetails">این فرایند ممکن است چند دقیقه طول بکشد.</p></div>
+   <div id="sepResult" class="result hidden" aria-live="polite"></div>
+  </div>
+  <div class="card">
+   <h3>خروجی‌های موتور</h3><p class="sub">پس از اتصال به بک‌اند، فایل واقعی پردازش‌شده برای دانلود ارائه می‌شود.</p>
+   <div class="result"><strong>🎤 Vocals</strong><p>صدای خواننده جداشده</p></div>
+   <div class="result"><strong>🎹 Instrumental</strong><p>موسیقی بدون وکال — در حالت ساده</p></div>
+   <div class="result"><strong>🥁 Drums · Bass · Other</strong><p>درام، بیس و سایر سازها — در حالت حرفه‌ای</p></div>
+   <p class="tiny" style="margin-top:12px">فایل هنگام اجرای جداسازی به بک‌اندی که خودت اجرا می‌کنی ارسال می‌شود. برای حفظ حریم خصوصی، از فایل‌هایی استفاده کن که اجازه پردازش آن‌ها را داری.</p>
+  </div>
+ </div>
+</section>
+
+<section id="battle" class="hidden">
+ <div class="hero" style="margin-bottom:14px">
+  <h2>⚔️ <span class="grad">Battle Arena</span></h2>
+  <p>رقابت خوانندگی به سبک کارائوکه: آهنگ بی‌کلام، متن روی صفحه و اجرای خودت؛ حالت زنده یا ضبط‌شده را انتخاب کن.</p>
+  <div class="status"><span class="dot"></span><span>نسخه آزمایشی: طراحی رقابت آماده است؛ اتصال آنلاین و پیدا کردن رقیب هنوز پیاده‌سازی نشده.</span></div>
+ </div>
+ <div class="grid">
+  <div class="card">
+   <h3>۱. نوع رقابت را انتخاب کن</h3><p class="sub">رقابت زنده یا ضبط‌شده را انتخاب کن؛ هر دو برای اجرای کارائوکه طراحی شده‌اند.</p>
+   <div class="field"><label>حالت رقابت</label><div class="choices" data-group="battleMode">
+    <button class="choice on" data-value="live">🔴 دوئل زنده 1v1</button>
+    <button class="choice" data-value="async">🎧 رقابت ضبط‌شده</button>
+   </div></div>
+   <div id="liveModeInfo" class="result"><strong>🔴 دوئل زنده</strong><p>دو نفر هم‌زمان آنلاین می‌شوند و هرکدام به نوبت روی یک بیت مشترک اجرا می‌کنند.</p></div>
+   <div id="asyncModeInfo" class="result hidden"><strong>🎧 رقابت ضبط‌شده</strong><p>یک اجرا می‌فرستی و رقیب در زمان خودش روی همان بیت پاسخ می‌دهد. مناسب وقتی هر دو هم‌زمان آنلاین نیستید.</p></div>
+   <div class="field"><label for="battleStyle">سبک رقابت</label><select id="battleStyle"><option>کارائوکه خوانندگی</option><option>کارائوکه پاپ</option><option>کارائوکه رپ ملودیک</option><option>فری‌استایل رپ</option></select></div>
+   <div class="field"><label for="battleDuration">زمان هر اجرا</label><select id="battleDuration"><option value="30">۳۰ ثانیه</option><option value="45">۴۵ ثانیه</option><option value="60">۶۰ ثانیه</option></select></div>
+  </div>
+  <div class="card">
+   <h3>۲. بیت رقابت را انتخاب کن</h3><p class="sub">برای نمونه اولیه، گزینه‌ها نمایشی‌اند؛ بیت‌های واقعی باید اختصاصی یا دارای مجوز باشند.</p>
+   <div class="choices" data-group="battleBeat" style="display:grid;grid-template-columns:1fr 1fr">
+    <button class="choice on" data-value="Neon Boom · 100 BPM">🥁 Neon Boom <span class="tiny">100 BPM</span></button>
+    <button class="choice" data-value="Street Bounce · 110 BPM">🎤 Street Bounce <span class="tiny">110 BPM</span></button>
+    <button class="choice" data-value="Melodic Clash · 92 BPM">🎹 Melodic Clash <span class="tiny">92 BPM</span></button>
+    <button class="choice" data-value="Pop Spark · 120 BPM">✨ Pop Spark <span class="tiny">120 BPM</span></button>
+   </div>
+   <div class="field"><label for="battlePrompt">موضوع یا نام آهنگ</label><input id="battlePrompt" type="text" placeholder="مثلاً آهنگ پاپ شاد یا موضوع اجرای رپ"></div>
+   <div class="field"><label>داوری</label><div class="choices" data-group="battleJudge"><button class="choice on" data-value="ai">🤖 امتیازدهی هوش مصنوعی</button><button class="choice" data-value="community">🗳️ رأی مخاطبان</button><button class="choice" data-value="both">هر دو</button></div></div>
+   <button class="btn" onclick="previewBattle()">ساخت پیش‌نمایش رقابت</button>
+   <div id="battleResult" class="result hidden" aria-live="polite"></div>
+  </div>
+ </div>
+ <div class="card" id="karaokeCard">
+  <h3>🎤 کارائوکه: آهنگ، متن و ضبط اجرا</h3>
+  <p class="sub">برای تست، یک فایل بی‌کلام یا بیت مجاز انتخاب کن؛ متن آهنگ را وارد کن و اجرای خودت را ضبط کن.</p>
+  <div class="grid">
+   <div>
+    <div class="field"><label for="karaokeBacking">۱. انتخاب آهنگ بی‌کلام / بیت</label><label class="filebox">فایل صوتی را انتخاب کن<input id="karaokeBacking" type="file" accept="audio/*"></label><div class="tiny" id="karaokeFileInfo">هنوز فایلی انتخاب نشده است.</div></div>
+    <audio id="karaokePlayer" controls style="width:100%;margin-top:8px;display:none"></audio>
+    <div class="field"><label for="karaokeLyrics">۲. متن آهنگ (برای خواندن روی بیت)</label><textarea id="karaokeLyrics" placeholder="متن مجاز یا متن خودت را اینجا وارد کن..." style="min-height:130px"></textarea></div>
+   </div>
+   <div>
+    <div class="result"><strong>🎧 راهنمای اجرا</strong><p>هدفون استفاده کن تا صدای بیت وارد میکروفون نشود. برای آهنگ‌های دارای حق نشر، فقط از فایل‌هایی استفاده کن که اجازه استفاده از آن‌ها را داری.</p></div>
+    <div class="field"><label>۳. ضبط وکال</label><button class="btn" id="recordBtn" onclick="startVocalRecording()">🔴 شروع ضبط اجرا</button><button class="btn secondary hidden" id="stopRecordBtn" onclick="stopVocalRecording()" style="margin-top:8px">⏹ توقف ضبط</button><div id="recordStatus" class="tiny" style="margin-top:9px" aria-live="polite">برای ضبط، اجازه دسترسی میکروفون را بده.</div></div>
+    <audio id="vocalPlayback" controls class="hidden" style="width:100%;margin-top:8px"></audio>
+    <a id="downloadVocal" class="btn secondary hidden" style="display:block;text-align:center;text-decoration:none;margin-top:9px" download="AI_Music_Lab_karaoke_take.webm">⬇️ دانلود اجرای ضبط‌شده</a>
+   </div>
+  </div>
+  <div class="result"><strong>ℹ️ وضعیت این نسخه</strong><p>پخش فایل انتخابی و ضبط/دانلود وکال روی همین دستگاه قابل آزمایش است. اتصال به حریف واقعی، ارسال اجرا، همگام‌سازی زنده و رأی‌گیری آنلاین هنوز پیاده‌سازی نشده‌اند.</p></div>
+ </div>
+ <div class="grid">
+  <div class="card"><h3>📊 معیارهای امتیازدهی پیشنهادی</h3>
+   <div class="result"><strong>🎵 ریتم و زمان‌بندی</strong><p>هماهنگی اجرا با ضرب و زمان ورود کلمات.</p></div>
+   <div class="result"><strong>🎤 دقت و وضوح وکال</strong><p>کیفیت ضبط، وضوح صدا و دقت زیر‌وبمی در بخش‌های ملودیک.</p></div>
+   <div class="result"><strong>🔥 فلو و خلاقیت</strong><p>تنوع ریتم بیان و تازگی ایده‌ها؛ این معیار به ارزیابی آزمایشی بیشتری نیاز دارد.</p></div>
+  </div>
+  <div class="card"><h3>🏆 رتبه‌بندی و چالش‌ها</h3>
+   <div class="result"><strong>چالش روزانه</strong><p>یک بیت مجاز، یک موضوع و اجرای کوتاه.</p></div>
+   <div class="result"><strong>رتبه‌بندی هفتگی</strong><p>امتیاز رقابت‌ها و بهترین اجراها؛ در نسخه عمومی نیازمند حساب کاربری و کنترل تقلب است.</p></div>
+   <p class="tiny" style="margin-top:12px">حریم خصوصی: پیش از انتشار عمومی باید اجازه ضبط/انتشار صدا، گزارش کاربر و ابزارهای ضدآزار طراحی شوند.</p>
+  </div>
+ </div>
+</section>
+
+<div class="foot">AI Music Lab • نسخهٔ آزمایشی ۰٫۸٫۱ • جداسازی صوت به بک‌اند Demucs متصل است؛ بخش کارائوکه محلی قابل آزمایش است؛ رقابت آنلاین Battle Arena هنوز فعال نیست.</div>
+</div>
+<script>
+let currentLang='en';
+function msg(fa,en){return currentLang==='fa'?fa:en;}
+const state={lyricMode:'write',genre:'پاپ',output:'با وکال',separation:'simple',battleMode:'live',battleBeat:'Neon Boom · 100 BPM',battleJudge:'ai'};
+let recorder=null, recordedChunks=[], recordingStream=null, vocalObjectUrl=null, backingObjectUrl=null;
+function showTab(id,btn){document.querySelectorAll('section[id]').forEach(s=>s.classList.toggle('hidden',s.id!==id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));}
+document.querySelectorAll('.choices').forEach(group=>group.addEventListener('click',e=>{const b=e.target.closest('.choice');if(!b)return;group.querySelectorAll('.choice').forEach(x=>x.classList.toggle('on',x===b));state[group.dataset.group]=b.dataset.value;if(group.dataset.group==='battleMode'){document.getElementById('liveModeInfo').classList.toggle('hidden',b.dataset.value!=='live');document.getElementById('asyncModeInfo').classList.toggle('hidden',b.dataset.value!=='async');}if(group.dataset.group==='lyricMode')document.getElementById('lyricsField').classList.toggle('hidden',b.dataset.value==='write');}));
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function buildSongBrief(){const lyrics=document.getElementById('lyrics').value.trim();const idea=document.getElementById('idea').value.trim()||msg('موضوع هنوز مشخص نشده','No topic specified yet');const lang=document.getElementById('language').value;const mood=document.getElementById('mood').value;const bpm=document.getElementById('bpm').value;const inst=document.getElementById('instruments').value.trim()||msg('انتخاب نشده','Not selected');const lyricMode=state.lyricMode==='write'?msg('هوش مصنوعی متن و آهنگ را بسازد','AI creates lyrics and music'):msg('استفاده از متن واردشده','Use provided lyrics');const labels=currentLang==='fa'?['ساخت آهنگ','موضوع','زبان','حال‌وهوا','سبک','خروجی','سازها','روش متن','متن']:['Create Song','Topic','Language','Mood','Genre','Output','Instruments','Lyrics mode','Lyrics'];const txt=`${labels[0]} | ${labels[1]}: ${idea} | ${labels[2]}: ${lang} | ${labels[3]}: ${mood} | ${labels[4]}: ${state.genre} | ${labels[5]}: ${state.output} | BPM: ${bpm} | ${labels[6]}: ${inst} | ${labels[7]}: ${lyricMode}${lyrics?' | '+labels[8]+': '+lyrics:''}`;const el=document.getElementById('songResult');el.classList.remove('hidden');el.innerHTML='<strong>'+msg('درخواست آماده شد (هنوز آهنگی تولید نشده)','Request prepared (no song has been generated yet)')+'</strong><p>'+esc(txt)+'</p><button class="btn secondary" style="margin-top:10px" onclick="copySong()">'+msg('کپی درخواست','Copy Request')+'</button>';window.songBrief=txt;}
+function copySong(){copyRaw(window.songBrief||'');}
+async function makePrompt(){
+ const btn=document.querySelector('#prompt .btn:not(.secondary)');
+ const el=document.getElementById('promptResult');
+ const vocal=document.getElementById('pVocal').value;
+ const bpmValue=document.getElementById('pBpm').value;
+ const bpm=Number(bpmValue);
+ const payload={mode:vocal.includes('بدون وکال')||vocal.toLowerCase().includes('instrumental')?'instrumental':'vocal',idea:document.getElementById('pMood').value||document.getElementById('pStyle').value,genre:document.getElementById('pStyle').value,mood:[document.getElementById('pMood').value],vocal_style:vocal,instruments:document.getElementById('pInstruments').value.split(',').map(x=>x.trim()).filter(Boolean),structure:[document.getElementById('pStructure').value],production:'Clean mix, clear arrangement, balanced mastering'};
+ if(Number.isFinite(bpm)&&bpm>=40&&bpm<=240)payload.tempo_bpm=bpm;
+ el.classList.remove('hidden');el.textContent=msg('در حال ساخت پرامپت با بک‌اند…','Building prompt with backend…');
+ if(btn)btn.disabled=true;
+ try{
+   const response=await fetch('/api/v1/prompts/build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+   const data=await response.json();
+   if(!response.ok)throw new Error(data.detail?.[0]?.msg||data.detail?.message||data.detail||'Request failed');
+   el.innerHTML='<strong>'+msg('پرامپت آماده شد','Prompt ready')+' · '+esc(data.enhancement_method)+'</strong><p id="promptText" style="white-space:pre-wrap;direction:ltr;text-align:left">'+esc(data.prompt)+'</p>';
+   document.getElementById('copyPrompt').classList.remove('hidden');
+ }catch(err){el.innerHTML='<strong>'+msg('ساخت پرامپت با خطا روبه‌رو شد','Could not build prompt')+'</strong><p>'+esc(err.message||'Backend unavailable')+'</p><p>'+msg('مطمئن شو بک‌اند با دستورهای README اجرا شده است.','Make sure the backend is running as described in README.')+'</p>';}
+ finally{if(btn)btn.disabled=false;}
+}
+async function copyText(id){const el=document.getElementById(id);await copyRaw(el?el.innerText:'');}
+async function copyRaw(txt){try{await navigator.clipboard.writeText(txt);alert(msg('کپی شد!','Copied!'))}catch(e){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert(msg('اگر کپی نشد، متن را دستی انتخاب کن.','If copying failed, select the text manually.'));}}
+document.getElementById('audioFile').addEventListener('change',e=>{const f=e.target.files[0];document.getElementById('fileInfo').textContent=f?`${f.name} — ${(f.size/1024/1024).toFixed(2)} MB`:msg('هنوز فایلی انتخاب نشده است.','No file selected yet.');});
+
+function previewBattle(){
+ const mode=state.battleMode==='live'?msg('دوئل زنده 1v1','Live 1v1 Duel'):msg('رقابت ضبط‌شده','Recorded Battle');
+ const style=document.getElementById('battleStyle').value;
+ const duration=document.getElementById('battleDuration').value;
+ const beat=state.battleBeat;
+ const topic=document.getElementById('battlePrompt').value.trim()||msg('آزاد','Open topic');
+ const judge=state.battleJudge==='ai'?msg('هوش مصنوعی','AI scoring'):state.battleJudge==='community'?msg('رأی مخاطبان','Audience vote'):msg('هوش مصنوعی + رأی مخاطبان','AI scoring + audience vote');
+ const el=document.getElementById('battleResult');el.classList.remove('hidden');
+ el.innerHTML='<strong>✅ '+msg('تنظیمات رقابت آماده شد','Battle setup is ready')+'</strong><p>'+msg('حالت','Mode')+': '+esc(mode)+'<br>'+msg('سبک اجرا','Performance style')+': '+esc(style)+'<br>'+msg('بیت پیشنهادی','Suggested beat')+': '+esc(beat)+'<br>'+msg('زمان هر اجرا','Performance length')+': '+esc(duration)+' '+msg('ثانیه','seconds')+'<br>'+msg('موضوع/آهنگ','Topic/song')+': '+esc(topic)+'<br>'+msg('داوری موردنظر','Judging')+': '+esc(judge)+'</p><p style="margin-top:8px;color:var(--warn)">'+msg('این پیش‌نمایش است. ابزار کارائوکه محلی برای پخش فایل و ضبط وکال دارد، اما اتصال به رقیب واقعی و داوری آنلاین هنوز فعال نیست.','This is a preview. Local karaoke can play a track and record vocals, but real opponent matching and online judging are not active yet.')+'</p>';
+}
+
+document.getElementById('karaokeBacking').addEventListener('change',e=>{
+ const f=e.target.files[0], player=document.getElementById('karaokePlayer');
+ document.getElementById('karaokeFileInfo').textContent=f?`${f.name} — ${(f.size/1024/1024).toFixed(2)} MB`:msg('هنوز فایلی انتخاب نشده است.','No file selected yet.');
+ if(backingObjectUrl)URL.revokeObjectURL(backingObjectUrl);
+ if(f){backingObjectUrl=URL.createObjectURL(f);player.src=backingObjectUrl;player.style.display='block';player.load();}else{player.removeAttribute('src');player.style.display='none';}
+});
+async function startVocalRecording(){
+ const status=document.getElementById('recordStatus');
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){status.textContent=msg('این مرورگر ضبط میکروفون را پشتیبانی نمی‌کند؛ از مرورگر به‌روز و صفحه HTTPS یا localhost استفاده کن.','This browser does not support microphone recording. Use an up-to-date browser over HTTPS or localhost.');return;}
+ try{
+  recordingStream=await navigator.mediaDevices.getUserMedia({audio:true});recordedChunks=[];
+  const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t));
+  recorder=mime?new MediaRecorder(recordingStream,{mimeType:mime}):new MediaRecorder(recordingStream);
+  recorder.ondataavailable=e=>{if(e.data&&e.data.size)recordedChunks.push(e.data)};
+  recorder.onstop=()=>{const blob=new Blob(recordedChunks,{type:recorder.mimeType||'audio/webm'});if(vocalObjectUrl)URL.revokeObjectURL(vocalObjectUrl);vocalObjectUrl=URL.createObjectURL(blob);const audio=document.getElementById('vocalPlayback');audio.src=vocalObjectUrl;audio.classList.remove('hidden');const link=document.getElementById('downloadVocal');link.href=vocalObjectUrl;link.download='AI_Music_Lab_karaoke_take.'+(blob.type.includes('mp4')?'mp4':'webm');link.classList.remove('hidden');status.textContent=msg('ضبط تمام شد؛ می‌توانی اجرا را گوش کنی یا دانلود کنی.','Recording finished. You can play or download your take.');if(recordingStream)recordingStream.getTracks().forEach(t=>t.stop());recordingStream=null;document.getElementById('recordBtn').classList.remove('hidden');document.getElementById('stopRecordBtn').classList.add('hidden');};
+  recorder.start();document.getElementById('recordBtn').classList.add('hidden');document.getElementById('stopRecordBtn').classList.remove('hidden');status.textContent=msg('در حال ضبط… وقتی تمام شد روی توقف بزن.','Recording… Press Stop when finished.');
+ }catch(err){status.textContent=msg('دسترسی میکروفون برقرار نشد: ','Microphone access failed: ')+(err.message||msg('اجازه میکروفون را بررسی کن.','Check microphone permission.'));if(recordingStream)recordingStream.getTracks().forEach(t=>t.stop());recordingStream=null;}
+}
+function stopVocalRecording(){if(recorder&&recorder.state!=='inactive')recorder.stop();}
+
+async function checkBackend(){const dot=document.querySelector('.status .dot');const label=document.querySelector('.status span:last-child');try{const r=await fetch('/api/health');if(!r.ok)throw new Error('offline');const d=await r.json();label.textContent=msg('اتصال برقرار است: موتور جداسازی ','Connected: separation engine ')+d.engine+msg(' آماده بررسی فایل است.',' is ready to receive files.');dot.style.background='var(--good)';dot.style.boxShadow='0 0 12px #8ef0bd66';}catch(e){label.textContent=msg('بک‌اند متصل نیست؛ برای پردازش واقعی، پروژه را طبق README اجرا کن.','Backend is offline. Follow the README to run real audio processing.');dot.style.background='var(--warn)';dot.style.boxShadow='0 0 12px #ffd18a66';}}
+async function runSeparation(){const f=document.getElementById('audioFile').files[0];const el=document.getElementById('sepResult');const progress=document.getElementById('sepProgress');const btn=document.getElementById('separateBtn');el.classList.remove('hidden');if(!f){el.innerHTML='<strong>'+msg('اول یک فایل صوتی انتخاب کن','Choose an audio file first')+'</strong><p>'+msg('فرمت‌های معمول مانند MP3، WAV و FLAC قابل استفاده‌اند.','Common formats such as MP3, WAV, and FLAC are supported.')+'</p>';return;}if(f.size>100*1024*1024){el.innerHTML='<strong>'+msg('فایل خیلی بزرگ است','File is too large')+'</strong><p>'+msg('برای این نسخه فایل کوچک‌تر از ۱۰۰ مگابایت انتخاب کن.','Choose a file smaller than 100 MB for this version.')+'</p>';return;}btn.disabled=true;btn.style.opacity='.65';progress.classList.remove('hidden');document.getElementById('sepStatus').textContent=msg('در حال ارسال فایل…','Uploading file…');document.getElementById('sepMeter').style.width='12%';document.getElementById('sepDetails').textContent=msg('فایل: ','File: ')+f.name+msg(' — لطفاً تا پایان پردازش صفحه را باز نگه دار.',' — Keep this page open until processing finishes.');el.innerHTML='<strong>'+msg('پردازش شروع شد','Processing started')+'</strong><p>'+msg('ممکن است بسته به طول آهنگ و قدرت دستگاه چند دقیقه زمان ببرد.','This may take several minutes depending on track length and server performance.')+'</p>';try{const fd=new FormData();fd.append('file',f);const url='/api/separate?mode='+encodeURIComponent(state.separation)+'&lang='+encodeURIComponent(currentLang);document.getElementById('sepStatus').textContent=state.separation==='simple'?msg('جداسازی وکال از موسیقی…','Separating vocals from instrumental…'):msg('جداسازی حرفه‌ای چهار بخش…','Separating four stems…');document.getElementById('sepMeter').style.width='35%';const response=await fetch(url,{method:'POST',body:fd});if(!response.ok){let message=msg('پردازش ناموفق بود.','Processing failed.');try{const j=await response.json();message=j.detail||message}catch(e){}throw new Error(message)}document.getElementById('sepMeter').style.width='92%';const blob=await response.blob();const cd=response.headers.get('content-disposition')||'';const match=cd.match(/filename="?([^";]+)"?/i);const filename=match?match[1]:'AI_Music_Lab_stems.zip';const a=document.createElement('a');const obj=URL.createObjectURL(blob);a.href=obj;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(obj),30000);document.getElementById('sepMeter').style.width='100%';document.getElementById('sepStatus').textContent=msg('جداسازی کامل شد!','Separation complete!');document.getElementById('sepDetails').textContent=msg('فایل ZIP خروجی دانلود شد.','Output ZIP downloaded.');el.innerHTML='<strong>✅ '+msg('خروجی آماده است','Output is ready')+'</strong><p>'+msg('فایل ZIP دانلود شد. آن را باز کن و کیفیت stemها را بررسی کن.','The ZIP file was downloaded. Open it to review the separated stems.')+'</p>';}catch(err){document.getElementById('sepStatus').textContent=msg('پردازش انجام نشد','Processing failed');document.getElementById('sepDetails').textContent=err.message;el.innerHTML='<strong>'+msg('اتصال یا پردازش با خطا مواجه شد','Connection or processing error')+'</strong><p>'+esc(err.message)+'</p><p>'+msg('اگر بک‌اند اجرا نیست، README را دنبال کن؛ اگر خطا ادامه داشت اسکرین‌شات ترمینال را بفرست.','If the backend is not running, follow the README. If the error persists, share a screenshot of the terminal.')+'</p>';}finally{btn.disabled=false;btn.style.opacity='1';}}
+checkBackend();
+function setTheme(t){const r=document.documentElement;if(t==='violet'){r.style.setProperty('--a','#aa8cff');r.style.setProperty('--b','#65cfff')}else if(t==='mint'){r.style.setProperty('--a','#8ef0bd');r.style.setProperty('--b','#ffd18a')}else{r.style.setProperty('--a','#55e6ed');r.style.setProperty('--b','#f27ad7')}try{localStorage.setItem('aiml-theme',t)}catch(e){}}
+try{setTheme(localStorage.getItem('aiml-theme')||'cyan')}catch(e){}
+
+const I18N = {"ایده‌ات را تبدیل به": "Turn your idea into", "موسیقی کن.": "music.", "مسیر ساخت آهنگ، طراحی پرامپت و جداسازی وکال را از یک فضای ساده و مناسب گوشی شروع کن.": "Create music, build prompts, and separate vocals in one simple, mobile-friendly workspace.", "حالت فعلی: در حال بررسی اتصال به موتور جداسازی صوت…": "Status: Checking connection to the audio separation engine…", "🎼 ساخت آهنگ": "🎼 Create Music", "✨ سازنده پرامپت": "✨ Prompt Builder", "🎙️ جداسازی وکال": "🎙️ Vocal Separation", "⚔️ بتل آرنا": "⚔️ Battle Arena", "ساخت آهنگ جدید": "Create a New Song", "اول مشخص کن چه آهنگی در ذهن داری.": "Start by describing the song you have in mind.", "روش ساخت": "Creation method", "هوش مصنوعی متن و آهنگ بسازد": "Let AI create lyrics and music", "متن خودم را دارم": "I have my own lyrics", "متن آهنگ (اختیاری)": "Lyrics (optional)", "موضوع یا داستان آهنگ": "Song topic or story", "زبان": "Language", "فارسی": "Persian", "ترکی": "Turkish", "بدون کلام": "Instrumental", "حال‌وهوا": "Mood", "شاد و پرانرژی": "Happy and energetic", "عاشقانه": "Romantic", "غمگین و احساسی": "Sad and emotional", "حماسی": "Epic", "آرام و رویایی": "Calm and dreamy", "تاریک و مرموز": "Dark and mysterious", "تنظیمات صدا": "Sound Settings", "ویژگی‌های کلی آهنگ را انتخاب کن.": "Choose the overall sound of your track.", "سبک موسیقی": "Music genre", "پاپ": "Pop", "هیپ‌هاپ": "Hip-hop", "رپ": "Rap", "راک": "Rock", "الکترونیک": "Electronic", "سینمایی": "Cinematic", "نوع خروجی": "Output type", "با وکال": "With vocals", "فقط موسیقی": "Instrumental only", "سرعت آهنگ (BPM)": "Tempo (BPM)", "۶۰ = آرام‌تر • ۱۸۰ = سریع‌تر": "60 = slower • 180 = faster", "سازها یا جزئیات دلخواه": "Instruments or details", "آماده‌سازی درخواست ساخت آهنگ": "Prepare Song Request", "سازنده پرامپت موسیقی": "Music Prompt Builder", "یک توضیح دقیق و قابل استفاده برای سرویس‌های تولید موسیقی بساز.": "Create a detailed prompt for music-generation services.", "سبک": "Style", "وکال": "Vocals", "وکال اصلی گرم و احساسی": "Warm, emotional lead vocal", "وکال زنانه": "Female vocal", "وکال مردانه": "Male vocal", "دوئت": "Duet", "بدون وکال، فقط موسیقی": "No vocals, instrumental only", "رپ ملودیک": "Melodic rap", "فضا و انرژی": "Mood and energy", "سازها": "Instruments", "ساختار آهنگ": "Song structure", "شروع کوتاه، ورس، کورس قدرتمند، پایان تمیز": "Short intro, verse, powerful chorus, clean ending", "شروع آرام و اوج تدریجی": "Soft intro and gradual build", "هوک فوری برای ویدئوی کوتاه": "Instant hook for a short video", "بیت تکرارشونده برای تمرین خوانندگی": "Looping beat for vocal practice", "ساخت پرامپت": "Generate Prompt", "کپی پرامپت": "Copy Prompt", "فایل صوتی را انتخاب کن": "Choose Audio File", "برای تست جداسازی، فایلی را انتخاب کن که اجازه استفاده از آن را داری.": "For separation testing, choose an audio file you have permission to use.", "🎵 انتخاب فایل از گوشی": "🎵 Choose File from Device", "هنوز فایلی انتخاب نشده است.": "No file selected yet.", "سطح جداسازی": "Separation Quality", "ساده: وکال + موسیقی": "Basic: Vocals + Instrumental", "حرفه‌ای: ۴ بخش": "Pro: 4 Stems", "شروع جداسازی واقعی": "Start Audio Separation", "در حال آماده‌سازی…": "Preparing…", "این فرایند ممکن است چند دقیقه طول بکشد.": "This process may take a few minutes.", "خروجی‌های موتور": "Engine Outputs", "پس از اتصال به بک‌اند، فایل واقعی پردازش‌شده برای دانلود ارائه می‌شود.": "Once the backend is connected, processed files will be available to download.", "صدای خواننده جداشده": "Separated vocal track", "موسیقی بدون وکال — در حالت ساده": "Instrumental track — basic mode", "درام، بیس و سایر سازها — در حالت حرفه‌ای": "Drums, bass, and other instruments — pro mode", "فایل هنگام اجرای جداسازی به بک‌اندی که خودت اجرا می‌کنی ارسال می‌شود. برای حفظ حریم خصوصی، از فایل‌هایی استفاده کن که اجازه پردازش آن‌ها را داری.": "The file is sent to the backend you run for processing. For privacy, only use files you have permission to process.", "رقابت خوانندگی به سبک کارائوکه: آهنگ بی‌کلام، متن روی صفحه و اجرای خودت؛ حالت زنده یا ضبط‌شده را انتخاب کن.": "Karaoke-style singing battles: use a backing track, on-screen lyrics, and your own performance. Choose live or recorded mode.", "نسخه آزمایشی: طراحی رقابت آماده است؛ اتصال آنلاین و پیدا کردن رقیب هنوز پیاده‌سازی نشده.": "Prototype: the battle interface is ready, but online matchmaking is not implemented yet.", "۱. نوع رقابت را انتخاب کن": "1. Choose Battle Type", "رقابت زنده یا ضبط‌شده را انتخاب کن؛ هر دو برای اجرای کارائوکه طراحی شده‌اند.": "Choose a live or recorded battle. Both modes are designed for karaoke performances.", "حالت رقابت": "Battle mode", "🔴 دوئل زنده 1v1": "🔴 Live 1v1 Duel", "🎧 رقابت ضبط‌شده": "🎧 Recorded Battle", "🔴 دوئل زنده": "🔴 Live Duel", "دو نفر هم‌زمان آنلاین می‌شوند و هرکدام به نوبت روی یک بیت مشترک اجرا می‌کنند.": "Two people join at the same time and take turns performing over the same beat.", "یک اجرا می‌فرستی و رقیب در زمان خودش روی همان بیت پاسخ می‌دهد. مناسب وقتی هر دو هم‌زمان آنلاین نیستید.": "Submit your performance and your opponent responds to the same beat later. Ideal when you are not online at the same time.", "سبک رقابت": "Battle style", "کارائوکه خوانندگی": "Singing Karaoke", "کارائوکه پاپ": "Pop Karaoke", "کارائوکه رپ ملودیک": "Melodic Rap Karaoke", "فری‌استایل رپ": "Rap Freestyle", "زمان هر اجرا": "Performance length", "۳۰ ثانیه": "30 seconds", "۴۵ ثانیه": "45 seconds", "۶۰ ثانیه": "60 seconds", "۲. بیت رقابت را انتخاب کن": "2. Choose a Battle Beat", "برای نمونه اولیه، گزینه‌ها نمایشی‌اند؛ بیت‌های واقعی باید اختصاصی یا دارای مجوز باشند.": "These beat options are placeholders. Real beats must be original or properly licensed.", "داوری": "Judging", "🤖 امتیازدهی هوش مصنوعی": "🤖 AI Scoring", "🗳️ رأی مخاطبان": "🗳️ Audience Vote", "هر دو": "Both", "ساخت پیش‌نمایش رقابت": "Preview Battle Setup", "🎤 کارائوکه: آهنگ، متن و ضبط اجرا": "🎤 Karaoke: Track, Lyrics & Recording", "برای تست، یک فایل بی‌کلام یا بیت مجاز انتخاب کن؛ متن آهنگ را وارد کن و اجرای خودت را ضبط کن.": "Choose a backing track you can use, enter lyrics, and record your performance.", "۱. انتخاب آهنگ بی‌کلام / بیت": "1. Choose Backing Track / Beat", "۲. متن آهنگ (برای خواندن روی بیت)": "2. Lyrics (to sing over the beat)", "🎧 راهنمای اجرا": "🎧 Performance Tips", "هدفون استفاده کن تا صدای بیت وارد میکروفون نشود. برای آهنگ‌های دارای حق نشر، فقط از فایل‌هایی استفاده کن که اجازه استفاده از آن‌ها را داری.": "Use headphones to prevent the backing track from bleeding into the microphone. Only use copyrighted tracks when you have permission.", "۳. ضبط وکال": "3. Record Vocals", "🔴 شروع ضبط اجرا": "🔴 Start Recording", "⏹ توقف ضبط": "⏹ Stop Recording", "برای ضبط، اجازه دسترسی میکروفون را بده.": "Allow microphone access to record.", "⬇️ دانلود اجرای ضبط‌شده": "⬇️ Download Recording", "ℹ️ وضعیت این نسخه": "ℹ️ Version Status", "پخش فایل انتخابی و ضبط/دانلود وکال روی همین دستگاه قابل آزمایش است. اتصال به حریف واقعی، ارسال اجرا، همگام‌سازی زنده و رأی‌گیری آنلاین هنوز پیاده‌سازی نشده‌اند.": "You can test local track playback and vocal recording/download on this device. Real opponents, submissions, live sync, and online voting are not implemented yet.", "📊 معیارهای امتیازدهی پیشنهادی": "📊 Suggested Scoring Criteria", "🎵 ریتم و زمان‌بندی": "🎵 Rhythm & Timing", "هماهنگی اجرا با ضرب و زمان ورود کلمات.": "How well the performance matches the beat and word timing.", "🎤 دقت و وضوح وکال": "🎤 Vocal Accuracy & Clarity", "کیفیت ضبط، وضوح صدا و دقت زیر‌وبمی در بخش‌های ملودیک.": "Recording quality, vocal clarity, and pitch accuracy in melodic sections.", "🔥 فلو و خلاقیت": "🔥 Flow & Creativity", "تنوع ریتم بیان و تازگی ایده‌ها؛ این معیار به ارزیابی آزمایشی بیشتری نیاز دارد.": "Rhythmic variety and originality; this criterion needs further testing.", "🏆 رتبه‌بندی و چالش‌ها": "🏆 Rankings & Challenges", "چالش روزانه": "Daily Challenge", "یک بیت مجاز، یک موضوع و اجرای کوتاه.": "One licensed beat, one topic, and a short performance.", "رتبه‌بندی هفتگی": "Weekly Rankings", "امتیاز رقابت‌ها و بهترین اجراها؛ در نسخه عمومی نیازمند حساب کاربری و کنترل تقلب است.": "Battle scores and top performances; a public release needs user accounts and anti-cheat controls.", "حریم خصوصی: پیش از انتشار عمومی باید اجازه ضبط/انتشار صدا، گزارش کاربر و ابزارهای ضدآزار طراحی شوند.": "Privacy: recording/publication consent, user reporting, and anti-harassment tools are needed before public launch.", "AI Music Lab • نسخهٔ آزمایشی ۰٫۸٫۱ • جداسازی صوت به بک‌اند Demucs متصل است؛ بخش کارائوکه محلی قابل آزمایش است؛ رقابت آنلاین Battle Arena هنوز فعال نیست.": "AI Music Lab • v0.8.1 prototype • Audio separation requires the Demucs backend; local karaoke can be tested; online Battle Arena is not active yet.", "رنگ:": "Theme:", "تم فیروزه‌ای و صورتی": "Cyan and pink theme", "تم بنفش و آبی": "Violet and blue theme", "تم سبز و کهربایی": "Mint and amber theme"};
+Object.assign(I18N, {
+ 'موضوع یا نام آهنگ':'Song topic or title',
+ 'متن آهنگت را اینجا بنویس...':'Write your lyrics here...',
+ 'مثلاً یک آهنگ شاد درباره شروع دوباره':'e.g. an upbeat song about starting over',
+ 'مثلاً گیتار، پیانو، درام سنگین':'e.g. guitar, piano, heavy drums',
+ 'مثلاً آهنگ پاپ شاد یا موضوع اجرای رپ':'e.g. an upbeat pop song or a rap topic',
+ 'متن مجاز یا متن خودت را اینجا وارد کن...':'Enter lyrics you have permission to use, or your own lyrics...',
+ 'شاد پاپ مدرن':'Modern upbeat pop',
+ 'مثبت، پرانرژی، ملودی به‌یادماندنی':'Positive, energetic, memorable melody',
+ 'درام شفاف، بیس گرم، سینت نرم':'Crisp drums, warm bass, soft synth'
+});
+const originalNodes = [];
+function setLanguage(lang){
+  currentLang=lang;
+  const isFa = lang === 'fa';
+  document.documentElement.lang = isFa ? 'fa' : 'en';
+  document.documentElement.dir = isFa ? 'rtl' : 'ltr';
+  document.getElementById('langEn').classList.toggle('active',!isFa);
+  document.getElementById('langFa').classList.toggle('active',isFa);
+  document.querySelector('[data-version-badge]').textContent = isFa ? 'نسخه ۰٫۸٫۱ • بهبود زبان دوگانه' : 'v0.8.1 • Bilingual UX Fixes';
+  document.querySelector('[data-theme-label]').textContent = isFa ? 'رنگ:' : 'Theme:';
+  document.querySelectorAll('.swatch').forEach((b,i)=>b.setAttribute('aria-label', isFa ? ['تم فیروزه‌ای و صورتی','تم بنفش و آبی','تم سبز و کهربایی'][i] : ['Cyan and pink theme','Violet and blue theme','Mint and amber theme'][i]));
+  if(!originalNodes.length){
+    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+    let n; while(n=walker.nextNode()){ if(n.nodeValue.trim()) originalNodes.push({node:n, original:n.nodeValue}); }
+  }
+  originalNodes.forEach(({node,original})=>{
+    const key=original.trim();
+    if(isFa){ node.nodeValue = original; }
+    else if(I18N[key]) { const leading=original.match(/^\s*/)[0], trailing=original.match(/\s*$/)[0]; node.nodeValue=leading+I18N[key]+trailing; }
+  });
+  document.querySelector('.brand p').textContent = isFa ? 'آزمایشگاه موسیقی هوشمند' : 'AI-powered music studio';
+  document.querySelectorAll('[placeholder]').forEach(el=>{
+    if(!el.dataset.faPlaceholder) el.dataset.faPlaceholder=el.placeholder;
+    const fa=el.dataset.faPlaceholder;
+    const en=I18N[fa];
+    el.placeholder=isFa?fa:(en||fa);
+  });
+  try{localStorage.setItem('aiml-language',lang)}catch(e){}
+  if(typeof checkBackend==='function') checkBackend();
+  const recordStatus=document.getElementById('recordStatus'); if(recordStatus && !recordStatus.dataset.custom) recordStatus.textContent=msg('برای ضبط، اجازه دسترسی میکروفون را بده.','Allow microphone access to record.');
+}
+
+setLanguage((()=>{try{return localStorage.getItem('aiml-language')||'en'}catch(e){return 'en'}})());
+</script>
+</body>
+</html>
