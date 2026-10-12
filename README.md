@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI Music Lab — Python backend starter
 
 This project keeps the existing single-file HTML interface and adds a modular FastAPI backend.
@@ -98,3 +99,6 @@ ai_music_lab/
 ├── .gitignore
 └── README.md
 ```
+=======
+# ai_music_lab
+>>>>>>> 83a1d05e78e707df2bde49f916739f2142d58903
